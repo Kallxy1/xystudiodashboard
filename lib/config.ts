@@ -5,6 +5,15 @@ export type SiteConfig = {
   note?: string;
 };
 
+export function branding() {
+  return {
+    title: process.env.ADMIN_BRAND_TITLE || "XyStudio Control Center",
+    subtitle: process.env.ADMIN_BRAND_SUBTITLE || "Monitor sites, BuildBox, revenue, and server actions.",
+    logoUrl: process.env.ADMIN_BRAND_LOGO_URL || "",
+    accent: process.env.ADMIN_BRAND_ACCENT || "#facc15"
+  };
+}
+
 export function sites(): SiteConfig[] {
   const raw = process.env.ADMIN_SITES_JSON;
   if (raw) {
