@@ -2,13 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { Activity, DollarSign, ExternalLink, Globe2, LogOut, RefreshCw, Server, ShieldCheck, Workflow } from "lucide-react";
+import { KeyIssuer } from "@/components/key-issuer";
 
 type Site = { name: string; url: string; ok: boolean; status: number; ms: number; error?: string };
 type RepoRuns = { label: string; owner: string; repo: string; ok: boolean; error?: string; runs: { id: number; name: string; status: string; conclusion: string | null; url: string; createdAt: string }[] };
 
-type Props = { email: string };
+type Brand = { title: string; subtitle: string; logoUrl: string; accent: string };
+type Props = { email: string; brand: Brand };
 
-export function Dashboard({ email }: Props) {
+export function Dashboard({ email, brand }: Props) {
   const [sites, setSites] = useState<Site[]>([]);
   const [repos, setRepos] = useState<RepoRuns[]>([]);
   const [ads, setAds] = useState<{ provider: string; today?: number | null; month?: number | null; currency?: string; note?: string } | null>(null);
@@ -42,8 +44,10 @@ export function Dashboard({ email }: Props) {
     <nav style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16, marginBottom: 24, flexWrap: "wrap" }}>
       <div>
         <div className="badge"><ShieldCheck size={14} /> Admin authenticated</div>
-        <h1 style={{ fontSize: 42, lineHeight: 1, letterSpacing: "-.05em", margin: "12px 0 8px", fontWeight: 950 }}>XyStudio Control Center</h1>
-        <p className="muted" style={{ margin: 0 }}>Logged in as {email}. Monitor sites, build actions, revenue, and services.</p>
+        <div style={{ display: "flex", alignItems: "center", gap: 14, marginTop: 12 }}>
+          {brand.logoUrl && <img src={brand.logoUrl} alt={brand.title} style={{ width: 52, height: 52, borderRadius: 16, objectFit: "cover", border: `1px solid ${brand.accent}55` }} />}
+          <div><h1 style={{ fontSize: 42, lineHeight: 1, letterSpacing: "-.05em", margin: "0 0 8px", fontWeight: 950 }}>{brand.title}</h1><p className="muted" style={{ margin: 0 }}>Logged in as {email}. {brand.subtitle}</p></div>
+        </div>
       </div>
       <div style={{ display: "flex", gap: 10 }}>
         <button className="btn secondary" onClick={load} disabled={loading}><RefreshCw size={16} />{loading ? "Refreshing" : "Refresh"}</button>
@@ -56,6 +60,8 @@ export function Dashboard({ email }: Props) {
       <div className="card" style={{ padding: 20 }}><div className="badge"><Workflow size={14} /> Actions</div><div style={{ fontSize: 36, fontWeight: 950, marginTop: 12 }}>{latestRuns.length}</div><p className="muted">recent workflow runs</p></div>
       <div className="card" style={{ padding: 20 }}><div className="badge"><DollarSign size={14} /> Ads</div><div style={{ fontSize: 30, fontWeight: 950, marginTop: 12 }}>{ads?.month == null ? "—" : `${ads.currency || "IDR"} ${ads.month}`}</div><p className="muted">monthly estimate</p></div>
     </section>
+
+    <KeyIssuer />
 
     <section className="grid grid-2" style={{ marginTop: 16 }}>
       <div className="card" style={{ padding: 20 }}>
