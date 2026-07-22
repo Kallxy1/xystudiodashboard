@@ -3,7 +3,9 @@
 import { useState } from "react";
 import { LockKeyhole } from "lucide-react";
 
-export function LoginForm() {
+type Brand = { title: string; subtitle: string; logoUrl: string; accent: string };
+
+export function LoginForm({ brand }: { brand: Brand }) {
   const [email, setEmail] = useState("");
   const [passcode, setPasscode] = useState("");
   const [message, setMessage] = useState("");
@@ -26,10 +28,12 @@ export function LoginForm() {
   }
 
   return <main className="container flex min-h-screen items-center justify-center py-10">
-    <section className="card w-full max-w-md p-6 sm:p-8">
-      <div className="mb-6 flex size-14 items-center justify-center rounded-2xl bg-white text-black"><LockKeyhole /></div>
-      <h1 className="mb-2 text-3xl font-black tracking-tight">XyStudio Admin</h1>
-      <p className="muted mb-6 text-sm leading-6">Login hanya untuk email yang diizinkan. Passcode disimpan di server env, bukan di browser.</p>
+    <section className="card w-full max-w-md p-6 sm:p-8" style={{ borderColor: `${brand.accent}44` }}>
+      <div className="mb-6 flex size-14 items-center justify-center overflow-hidden rounded-2xl bg-white text-black">
+        {brand.logoUrl ? <img src={brand.logoUrl} alt={brand.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <LockKeyhole />}
+      </div>
+      <h1 className="mb-2 text-3xl font-black tracking-tight">{brand.title}</h1>
+      <p className="muted mb-6 text-sm leading-6">{brand.subtitle}</p>
       <form onSubmit={submit}>
         <label className="mb-2 block text-sm font-bold text-zinc-300">Allowed email</label>
         <input className="field mb-4" type="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="you@xystudio.my.id" required />
